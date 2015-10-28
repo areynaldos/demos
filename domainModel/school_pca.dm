@@ -129,8 +129,12 @@
 		<meta-property name="table-name">VMRSUB</meta-property>
 		<property name="code" type="string"/>
 		<property name="description" type="string"/>
+		<property name="alternateCode" type="string"/>
 		<primary-key name="Subject_PK">
 			<property-ref name="code"/>
 		</primary-key>
+		<unique-key name="Subject_UK0">
+			<property-ref name="alternateCode"/>
+		</unique-key>
 	</entity>
 </domain-model>

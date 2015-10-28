@@ -3,15 +3,14 @@
 	<meta-property name="diagrams">
 		<ns:diagrams>
 			<ns:diagram name="School">
-				<ns:entity-node entity-id="Teacher" x="55" y="240"/>
-				<ns:entity-node entity-id="Subject" x="55" y="432"/>
+				<ns:entity-node background-color="9498256" entity-id="Teacher" x="55" y="240"/>
+				<ns:entity-node background-color="9498256" entity-id="Subject" x="55" y="432"/>
 				<ns:entity-node entity-id="SubjectClass" x="424" y="274"/>
-				<ns:entity-node entity-id="Student" x="337" y="71"/>
+				<ns:entity-node background-color="9498256" entity-id="Student" x="337" y="71"/>
 				<ns:entity-node entity-id="ClassEnrolment" x="636" y="180"/>
 				<ns:entity-node entity-id="FinalGradeEnum" x="696" y="403"/>
 				<ns:entity-node entity-id="ClassScheduleEnum" x="440" y="435"/>
 				<ns:entity-node entity-id="HoursPerDayType" x="692" y="310"/>
-				<ns:entity-node entity-id="BaseEntity" x="940" y="102"/>
 			</ns:diagram>
 		</ns:diagrams>
 	</meta-property>
@@ -97,8 +96,12 @@
 		<property name="code" type="string"/>
 		<property name="description" type="string"/>
 		<property max-occurs="2147483647" name="subjectClasses" reverse-min-occurs="1" type="SubjectClass"/>
+		<property name="alternateCode" type="string"/>
 		<unique-key name="Subject_UK0">
 			<property-ref name="code"/>
+		</unique-key>
+		<unique-key name="Subject_UK1">
+			<property-ref name="alternateCode"/>
 		</unique-key>
 	</entity>
 	<entity extends-entity="BaseEntity" name="SubjectClass">
