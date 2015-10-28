@@ -173,11 +173,11 @@
 	<bean id="excelHashMapLoader" class="com.maketechnologies.dmw.transformer.data.excel.ExcelHashMapLoader" scope="prototype">
 		<property name="jdbcDataSource" ref="excelJdbcDataSource"/>
 		<property name="trimRecords" value="true"/>
-		<property name="inputPath" value="dataLoad-seedData"/>
+		<property name="inputPath" value="dataLoad"/>
 	</bean>
 	<bean id="excelXomLoader" class="com.maketechnologies.dmw.transformer.data.excel.ExcelXomLoader" scope="prototype">
 		<property name="trimRecords" value="true"/>
-		<property name="inputPath" value="dataLoad-seedData"/>
+		<property name="inputPath" value="dataLoad"/>
 	</bean>
 	<bean id="csvHashMapLoader" class="com.maketechnologies.dmw.transformer.data.csv.CsvHashMapLoader" scope="prototype">
 		<property name="jdbcDataSource" ref="csvJdbcDataSource"/>
