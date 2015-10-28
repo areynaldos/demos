@@ -29,6 +29,7 @@
 				<ns:entity-node entity-id="FinalGradeEnum" x="696" y="403"/>
 				<ns:entity-node entity-id="ClassScheduleEnum" x="440" y="435"/>
 				<ns:entity-node entity-id="HoursPerDayType" x="692" y="310"/>
+				<ns:entity-node entity-id="BaseEntity" x="940" y="102"/>
 			</ns:diagram>
 		</ns:diagrams>
 	</meta-property>

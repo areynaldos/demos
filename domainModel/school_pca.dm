@@ -25,13 +25,12 @@
 				<ns:entity-node entity-id="RoleType" x="721" y="167"/>
 			</ns:diagram>
 			<ns:diagram name="School">
-				<ns:entity-node entity-id="Subject" x="55" y="432"/>
 				<ns:entity-node entity-id="Class" x="424" y="274"/>
-				<ns:entity-node entity-id="ClassEnrolment" x="636" y="180"/>
+				<ns:entity-node entity-id="ClassEnrolment" x="696" y="144"/>
 				<ns:entity-node entity-id="FinalGradeEnum" x="696" y="403"/>
 				<ns:entity-node entity-id="HoursPerDayType" x="692" y="310"/>
 				<ns:entity-node entity-id="Person" x="944" y="150"/>
-				<ns:entity-node entity-id="BaseEntity" x="1049" y="414"/>
+				<ns:entity-node entity-id="Subject" x="168" y="290"/>
 			</ns:diagram>
 		</ns:diagrams>
 	</meta-property>
@@ -125,40 +124,41 @@
 		<property name="streetNumber" type="string"/>
 		<property name="addressType" type="AddressTypeEnum"/>
 	</entity>
-	<entity extends-entity="BaseEntity" name="Subject">
-		<property name="code" type="string"/>
-		<property name="description" type="string"/>
-		<property max-occurs="2147483647" name="classes" reverse-min-occurs="1" type="Class"/>
-		<unique-key name="Subject_UK0">
-			<property-ref name="code"/>
-		</unique-key>
-	</entity>
-	<entity extends-entity="BaseEntity" name="Class">
+	<entity name="Class">
 		<property name="classId" type="string"/>
+		<property name="subjectCode" type="string"/>
+		<property name="teacherId" type="string"/>
 		<property name="schedule" type="ClassScheduleEnum"/>
 		<property name="hoursPerDay" type="HoursPerDayType"/>
-		<property max-occurs="2147483647" name="classEnrolments" type="ClassEnrolment"/>
-		<unique-key name="Class_UK0">
+		<primary-key name="Class_PK">
 			<property-ref name="classId"/>
-		</unique-key>
+		</primary-key>
 	</entity>
-	<entity extends-entity="BaseEntity" name="ClassEnrolment">
+	<entity name="ClassEnrolment">
+		<property name="classId" type="string"/>
+		<property name="studentId" type="string"/>
 		<property name="finalGrade" type="FinalGradeEnum"/>
 	</entity>
 	<entity name="Person">
-		<property name="person_id" type="string"/>
+		<meta-property name="table-name">VMRPERS</meta-property>
+		<property name="personId" type="string"/>
 		<property name="firstName" type="string"/>
 		<property name="lastName" type="string"/>
 		<property name="telephoneNumber" type="string"/>
-		<property max-occurs="2147483647" name="classes" type="Class">
-			<meta-property name="jpa-join-column">teacher_id</meta-property>
-		</property>
+		<property name="personType" type="string"/>
 		<primary-key name="SchoolPerson_PK">
-			<property-ref name="person_id"/>
+			<property-ref name="personId"/>
 		</primary-key>
 		<index name="Teacher_IX02">
 			<property-ref name="lastName"/>
 			<property-ref name="firstName"/>
 		</index>
+	</entity>
+	<entity name="Subject">
+		<property name="code" type="string"/>
+		<property name="description" type="string"/>
+		<primary-key name="Subject_PK">
+			<property-ref name="code"/>
+		</primary-key>
 	</entity>
 </domain-model>
