@@ -78,7 +78,7 @@
 		</primary-key>
 	</entity>
 	<entity extends-entity="BaseEntity" name="Teacher">
-		<property name="payrollId" type="string"/>
+		<property min-occurs="1" name="payrollId" type="string"/>
 		<property name="firstName" type="string"/>
 		<property name="lastName" type="string"/>
 		<property name="telephoneNumber" type="string"/>
