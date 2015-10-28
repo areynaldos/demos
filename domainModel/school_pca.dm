@@ -126,6 +126,7 @@
 		</index>
 	</entity>
 	<entity name="Subject">
+		<meta-property name="table-name">VMRSUB</meta-property>
 		<property name="code" type="string"/>
 		<property name="description" type="string"/>
 		<primary-key name="Subject_PK">
