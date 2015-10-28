@@ -41,7 +41,6 @@
 		<mapping action="foreignKey" src="teacherId" target="teacher" key="/Teacher/id"/>
 		<mapping src="schedule" target="schedule"/>
 		<mapping src="hoursPerDay" target="hoursPerDay"/>
-		<mapping action="foreignKey" src="subjectCode" target="subject"/>
 	</transform>
 	<transform src="Book" target="Book">
 		<mapping action="uniqueKey" src="ISBN" target="ISBN" strategy="copy"/>
