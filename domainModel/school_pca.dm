@@ -96,6 +96,7 @@
 		</primary-key>
 	</entity>
 	<entity name="Class">
+		<meta-property name="table-name">VMRCLASS</meta-property>
 		<property name="classId" type="string"/>
 		<property name="subjectCode" type="string"/>
 		<property name="teacherId" type="string"/>
