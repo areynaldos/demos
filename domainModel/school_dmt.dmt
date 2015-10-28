@@ -31,6 +31,8 @@
 		<mapping action="surrogateKey" src="code" target="id"/>
 		<mapping action="uniqueKey" src="code" target="code"/>
 		<mapping src="description" target="description"/>
+		<mapping action="uniqueToSurrogateKey" src="alternateCode"/>
+		<mapping src="alternateCode" target="alternateCode"/>
 	</transform>
 	<transform src="Class" target="SubjectClass">
 		<mapping action="surrogateKey" src="classId" target="id"/>
@@ -39,6 +41,12 @@
 		<mapping action="foreignKey" src="teacherId" target="teacher" key="/Teacher/id"/>
 		<mapping src="schedule" target="schedule"/>
 		<mapping src="hoursPerDay" target="hoursPerDay"/>
+		<mapping action="foreignKey" src="subjectCode" target="subject"/>
+	</transform>
+	<transform src="Book" target="Book">
+		<mapping action="uniqueKey" src="ISBN" target="ISBN" strategy="copy"/>
+		<mapping src="Title" target="Title"/>
+		<mapping action="foreignKey" src="subjectCode" target="subject" key="/Subject/id via alternateCode"/>
 	</transform>
 	<field-caster language="groovy" name="ConvertYnFlag"><![CDATA[
 		// for DB2 emit 0 / 1 values

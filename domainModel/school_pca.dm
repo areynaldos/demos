@@ -10,6 +10,7 @@
 				<ns:entity-node entity-id="Class" x="217" y="48"/>
 				<ns:entity-node entity-id="ClassEnrolment" x="459" y="48"/>
 				<ns:entity-node entity-id="Subject" x="901" y="48"/>
+				<ns:entity-node entity-id="Book" x="59" y="240"/>
 			</ns:diagram>
 			<ns:diagram name="New Diagram" showIcons="true">
 				<ns:entity-node entity-id="Person" x="434" y="324"/>
@@ -137,5 +138,12 @@
 		<unique-key name="Subject_UK0">
 			<property-ref name="alternateCode"/>
 		</unique-key>
+	</entity>
+	<entity name="Book">
+		<property name="ISBN" type="string"/>
+		<property name="Title" type="string"/>
+		<property name="subjectCode" type="string">
+			<description>Links to the alternate subject code</description>
+		</property>
 	</entity>
 </domain-model>

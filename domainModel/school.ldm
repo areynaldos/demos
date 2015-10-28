@@ -11,6 +11,7 @@
 				<ns:entity-node entity-id="FinalGradeEnum" x="696" y="403"/>
 				<ns:entity-node entity-id="ClassScheduleEnum" x="440" y="435"/>
 				<ns:entity-node entity-id="HoursPerDayType" x="692" y="310"/>
+				<ns:entity-node entity-id="Book" x="360" y="528"/>
 			</ns:diagram>
 		</ns:diagrams>
 	</meta-property>
@@ -97,6 +98,9 @@
 		<property name="description" type="string"/>
 		<property max-occurs="2147483647" name="subjectClasses" reverse-min-occurs="1" type="SubjectClass"/>
 		<property name="alternateCode" type="string"/>
+		<property max-occurs="2147483647" name="books" type="Book">
+			<meta-property name="target-diagram-label-source">alternateSubject</meta-property>
+		</property>
 		<unique-key name="Subject_UK0">
 			<property-ref name="code"/>
 		</unique-key>
@@ -129,5 +133,12 @@
 	</entity>
 	<entity extends-entity="BaseEntity" name="ClassEnrolment">
 		<property name="finalGrade" type="FinalGradeEnum"/>
+	</entity>
+	<entity name="Book">
+		<property name="ISBN" type="string"/>
+		<property name="Title" type="string"/>
+		<primary-key name="Book_PK">
+			<property-ref name="ISBN"/>
+		</primary-key>
 	</entity>
 </domain-model>
