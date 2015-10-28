@@ -3,10 +3,13 @@
 	<meta-property name="diagrams">
 		<ns:diagrams>
 			<ns:diagram name="Diagram">
-				<ns:entity-node entity-id="BaseEntity" x="143" y="48"/>
-				<ns:entity-node entity-id="Person" x="276" y="264"/>
-				<ns:entity-node entity-id="RoleType" x="331" y="139"/>
-				<ns:entity-node entity-id="LongText" x="331" y="48"/>
+				<ns:entity-node entity-id="BaseEntity" x="48" y="48"/>
+				<ns:entity-node entity-id="Person" x="678" y="48"/>
+				<ns:entity-node entity-id="RoleType" x="1100" y="48"/>
+				<ns:entity-node entity-id="LongText" x="901" y="180"/>
+				<ns:entity-node entity-id="Class" x="217" y="48"/>
+				<ns:entity-node entity-id="ClassEnrolment" x="459" y="48"/>
+				<ns:entity-node entity-id="Subject" x="901" y="48"/>
 			</ns:diagram>
 			<ns:diagram name="New Diagram" showIcons="true">
 				<ns:entity-node entity-id="Person" x="434" y="324"/>

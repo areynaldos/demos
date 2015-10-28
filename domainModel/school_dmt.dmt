@@ -6,7 +6,7 @@
 	<variable comment="initial created user name for all records" name="auditUser" value="'DMW'"/>
 	<!-- data transforms
   -->
-	<transform src="Person" target="Student">
+	<transform src="Person" target="Student" where="personType =  'S'">
 		<mapping src="$auditUser" target="creator"/>
 		<mapping src="current-dateTime()" target="created"/>
 		<mapping action="create" target="modifier"/>
@@ -15,8 +15,17 @@
 		<mapping action="surrogateKey" src="personId" target="id"/>
 		<mapping src="personId" target="studentId"/>
 		<mapping src="firstName" target="firstName"/>
+		<mapping src="telephoneNumber" target="telephoneNumber"/>
+		<mapping action="drop" src="personType"/>
+		<mapping src="lastName" target="lastName"/>
+	</transform>
+	<transform src="Person" target="Teacher" where="personType = 'T'">
+		<mapping action="surrogateKey" src="personId" target="id"/>
+		<mapping src="personId" target="payrollId"/>
+		<mapping src="firstName" target="firstName"/>
 		<mapping src="lastName" target="lastName"/>
 		<mapping src="telephoneNumber" target="telephoneNumber"/>
+		<mapping action="drop" src="personType"/>
 	</transform>
 	<field-caster language="groovy" name="ConvertYnFlag"><![CDATA[
 		// for DB2 emit 0 / 1 values
