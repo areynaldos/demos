@@ -1,0 +1,179 @@
+<dmt inputSchema="sample_pca.dm" outputSchema="sample_fca.ldm" xmlns="http://maketechnologies.com/dmw/dmtl">
+	<!-- global variables, for use throughout
+  -->
+	<variable comment="initial version number for all records" name="initialVersion" value="'1'"/>
+	<variable comment="initial created user name for all records" name="auditUser" value="'DMW'"/>
+	<!-- data transforms
+  -->
+	<transform src="User" target="Person" coalesceGroup="Person" targetVar="parentTarget">
+		<mapping src="$auditUser" target="createdBy"/>
+		<mapping src="current-dateTime()" target="createdDateTime"/>
+		<mapping action="create" target="modifiedBy"/>
+		<mapping action="create" target="modifiedDateTime"/>
+		<mapping src="$initialVersion" target="version"/>
+		<mapping action="surrogateKey" src="acctid" target="id" generator="AUTO_INCREMENT"/>
+		<mapping src="fname" target="firstName"/>
+		<mapping src="lname" target="lastName"/>
+		<!--	dont enforce UK		<mapping action="uniqueKey" src="email" target="primaryEmail"/>
+		-->
+		<mapping src="email" target="primaryEmail"/>
+		<mapping src="phone" srcExp="if (phone eq '') then dmw:nil() else if (string-length(phone) eq 7) then concat('000-', substring(phone,1,3), '-', substring(phone,4,4)) else concat(substring(phone,1,3), '-', substring(phone,4,3), '-', substring(phone,7,4))" target="primaryTelephone"/>
+		<mapping src="useEmail" srcExp="if (useEmail eq 'E') then 'Email' else 'Mail'" target="primaryContactMethod"/>
+		<mapping src="cmt" target="commentText"/>
+		<mapping action="create" target="mugshotPhoto"/>
+		<mapping action="uniqueToSurrogateKey" src="acctnm" comment="used for mgr lookup" ignoreBlanks="true"/>
+		<mapping action="foreignKey" src="mgr" target="managedBy" key="/Person/id via acctnm" violationPolicy="RETAIN"/>
+		<transform target="UserAccount" comment="Surrogate is placed AFTER the FK and UTSK in this transform, to test re-ordering of rules">
+			<mapping src="$auditUser" target="createdBy"/>
+			<mapping src="current-dateTime()" target="createdDateTime"/>
+			<mapping action="create" target="modifiedBy"/>
+			<mapping action="create" target="modifiedDateTime"/>
+			<mapping src="$initialVersion" target="version"/>
+			<!--	deprecate UK action	<mapping action="uniqueKey" src="acctnm" target="userName"/>
+		-->
+			<mapping src="acctnm" target="userName"/>
+			<mapping action="uniqueToSurrogateKey" src="acctnm" comment="enforce unique name value"/>
+			<mapping action="foreignKey" src="$parentTarget/id" target="person" key="/Person/id" violationPolicy="RETAIN" strategy="copy"/>
+			<mapping action="surrogateKey" src="acctid" target="id" generator="AUTO_INCREMENT"/>
+			<mapping src="'false'" target="accountExpired"/>
+		</transform>
+	</transform>
+	<transform src="Role" target="Role">
+		<mapping src="$auditUser" target="createdBy"/>
+		<mapping src="current-dateTime()" target="createdDateTime"/>
+		<mapping action="create" target="modifiedBy"/>
+		<mapping action="create" target="modifiedDateTime"/>
+		<mapping src="$initialVersion" target="version"/>
+		<mapping action="surrogateKey" src="cd" srcExp="upper-case(cd)" target="code" generator="NATURAL"/>
+		<mapping src="desc" target="description"/>
+		<mapping action="drop" src="privct" comment="replaced with transient"/>
+		<mapping src="adminRole" srcExp="if (adminRole eq 'X') then 'Admin' else 'User'" target="roleType"/>
+		<mapping action="create" target="sortOrder"/>
+		<mapping src="'true'" target="activeValue"/>
+	</transform>
+	<transform src="Addr" target="Address">
+		<mapping src="$auditUser" target="createdBy"/>
+		<mapping src="current-dateTime()" target="createdDateTime"/>
+		<mapping action="create" target="modifiedBy"/>
+		<mapping action="create" target="modifiedDateTime"/>
+		<mapping src="$initialVersion" target="version"/>
+		<mapping action="surrogateKey" src="addrid" target="id" generator="NATURAL"/>
+		<mapping action="uniqueToSurrogateKey" src="User_id, type" keyCount="2"/>
+		<mapping action="foreignKey" src="User_id" target="person" key="/Person/id" violationPolicy="PURGE"/>
+		<mapping action="foreignKey" src="Locn_provcd" target="province" key="/Province/code" violationPolicy="RETAIN"/>
+		<mapping action="foreignKey" src="Locn_provcd" target="provinceHistorical" key="/ProvinceHistorical/code" violationPolicy="RETAIN"/>
+		<mapping action="create" target="country"/>
+		<mapping src="type" target="addressType"/>
+		<mapping src="line1" target="line1"/>
+		<mapping src="line2" target="line2"/>
+		<mapping src="city" target="city"/>
+		<mapping action="create" target="postalCode"/>
+		<mapping action="create" target="otherProvinceCountry"/>
+	</transform>
+	<transform src="Priv" target="UserPrivilege">
+		<mapping src="$auditUser" target="createdBy"/>
+		<mapping src="current-dateTime()" target="createdDateTime"/>
+		<mapping action="create" target="modifiedBy"/>
+		<mapping action="create" target="modifiedDateTime"/>
+		<mapping src="$initialVersion" target="version"/>
+		<mapping action="surrogateKey" src="Acct_id, Role_cd" target="id" keyCount="2" generator="AUTO_INCREMENT"/>
+		<mapping action="foreignKey" src="Role_cd" target="role" key="/Role/code" violationPolicy="PURGE"/>
+		<mapping action="foreignKey" src="Acct_id" target="userAccount" key="/UserAccount/id" violationPolicy="PURGE"/>
+		<mapping src="prime" target="primaryRole" caster="ConvertYnFlag"/>
+		<mapping src="max" target="maximumAuthorization"/>
+		<mapping src="effdat" target="effectiveDate"/>
+		<mapping src="expdat" target="expiryDate"/>
+	</transform>
+	<transform src="Locn" target="Province" defaultForeignKeyViolationPolicy="RETAIN">
+		<mapping src="$auditUser" target="createdBy"/>
+		<mapping src="current-dateTime()" target="createdDateTime"/>
+		<mapping action="create" target="modifiedBy"/>
+		<mapping action="create" target="modifiedDateTime"/>
+		<mapping src="$initialVersion" target="version"/>
+		<mapping action="surrogateKey" src="provcd" target="code" generator="NATURAL"/>
+		<mapping src="provnm" target="description"/>
+		<mapping action="foreignKey" src="cntry" srcExp="substring(cntry,1,12)" target="country" key="/Country/code" violationPolicy="PURGE"/>
+		<mapping action="foreignKey" src="provcd" srcExp="dmw:nil()" target="spanningProvinceHistorical" key="/ProvinceHistorical/code"/>
+		<mapping action="create" target="sortOrder"/>
+		<mapping src="'true'" target="activeValue"/>
+	</transform>
+	<transform src="Locn" target="ProvinceHistorical" where="1 eq 0" comment="migrate nothing into Historical, for now">
+		<mapping src="$auditUser" target="createdBy"/>
+		<mapping src="current-dateTime()" target="createdDateTime"/>
+		<mapping action="create" target="modifiedBy"/>
+		<mapping action="create" target="modifiedDateTime"/>
+		<mapping src="$initialVersion" target="version"/>
+		<mapping action="surrogateKey" src="provcd" target="code" generator="NATURAL"/>
+		<mapping src="provnm" target="description"/>
+		<mapping action="foreignKey" src="cntry" srcExp="substring(cntry,1,12)" target="country" key="/Country/code" violationPolicy="PURGE"/>
+		<mapping action="foreignKey" src="provcd" srcExp="dmw:nil()" target="provinceIsNow" key="/Province/code" violationPolicy="PURGE"/>
+		<mapping action="create" target="sortOrder"/>
+		<mapping src="'true'" target="activeValue"/>
+	</transform>
+	<transform src="Locn" target="Country" comment="will have many duplicates be rejected">
+		<mapping src="$auditUser" target="createdBy"/>
+		<mapping src="current-dateTime()" target="createdDateTime"/>
+		<mapping action="create" target="modifiedBy"/>
+		<mapping action="create" target="modifiedDateTime"/>
+		<mapping src="$initialVersion" target="version"/>
+		<mapping action="surrogateKey" src="cntry" srcExp="substring(cntry,1,12)" target="code" generator="NATURAL"/>
+		<mapping src="cntry" target="description"/>
+		<mapping action="create" target="sortOrder"/>
+		<mapping src="'true'" target="activeValue"/>
+	</transform>
+	<transform src="UserEquip" target="StaffEquipment">
+		<mapping src="$auditUser" target="createdBy"/>
+		<mapping src="current-dateTime()" target="createdDateTime"/>
+		<mapping action="create" target="modifiedBy"/>
+		<mapping action="create" target="modifiedDateTime"/>
+		<mapping src="$initialVersion" target="version"/>
+		<mapping action="surrogateKey" src="equipid" target="id" generator="AUTO_INCREMENT"/>
+		<mapping src="equipid" target="equipmentId"/>
+		<mapping src="desc" target="description"/>
+		<mapping src="mfrsn" target="serialNumber"/>
+		<mapping src="mobile" srcExp="if (mobile eq 'S') then 'Y' else 'N'" target="atSite" caster="ConvertYnFlag"/>
+		<mapping action="foreignKey" src="User_id" target="person" key="/Person/id" violationPolicy="PURGE"/>
+		<mapping action="foreignKey" src="User_id, 'W'" target="address" key="/Address/id via User_id, type" violationPolicy="RETAIN" comment="only reference to Work address"/>
+	</transform>
+	<transform src="UserEquip" target="Person" where="mobile eq 'M'" coalesceGroup="Person" optional="true">
+		<mapping action="surrogateKey" src="User_id" target="id" generator="NATURAL"/>
+		<mapping src="'true'" target="mobileEquipmentAuthorized" caster="ConvertYnFlag"/>
+	</transform>
+	<!-- 	<field-caster language="groovy" name="ConvertYnFlag"><![CDATA[
+		// for Oracle emit true / false values
+		String cast(text){
+			if (text == 'Y')  return "true"
+			if (text == 'y')  return "true"
+			if (text == 'X')  return "true"
+			if (text == 'x')  return "true"
+			if (text == '1')  return "true"
+			if (text.toLowerCase() == "true") return "true"
+			if (text == 'N')  return "false"
+			if (text == 'n')  return "false"
+			if (text == ' ')  return "false"
+			if (text == '')   return "false"
+			if (text == '0')  return "false"
+			if (text.toLowerCase() == "false") return "false"
+			return text
+		}
+	]]></field-caster> 
+	-->
+	<field-caster language="groovy" name="ConvertYnFlag"><![CDATA[
+		// for DB2 emit 0 / 1 values
+		String cast(text){
+			if (text == 'Y')  return "1"
+			if (text == 'y')  return "1"
+			if (text == 'X')  return "1"
+			if (text == 'x')  return "1"
+			if (text == '1')  return "1"
+			if (text.toLowerCase() == "true") return "1"
+			if (text == 'N')  return "0"
+			if (text == 'n')  return "0"
+			if (text == ' ')  return "0"
+			if (text == '')   return "0"
+			if (text == '0')  return "0"
+			if (text.toLowerCase() == "false") return "0"
+			return "999"
+		}
+	]]></field-caster>
+</dmt>

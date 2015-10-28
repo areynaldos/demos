@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is the AQHA Model migration run, source is seed data folder files + AS400, target is aqh_dev schema -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util 
+        http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+	<context:annotation-config/>
+
+	<bean id="testBean" class="com.maketechnologies.dmw.transformer.Testing">
+		<property name="testString"
+			value="Spring Framework successfully initialized for the DMW" />
+	</bean>
+
+	<!-- METRICS -->
+	<bean id="metricRegistry" class="com.codahale.metrics.MetricRegistry"/>
+
+	<!-- POSSIBLE DATA SOURCES - CONFIGURE AT WILL -->
+
+	<!-- DataSource into which the Excel files should be cached -->
+	<bean id="excelJdbcDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:mem:excel;DB_CLOSE_DELAY=-1" />
+		<property name="username" value="sa" />
+		<property name="password" value="sa" />
+		<property name="initialSize" value="5" />
+		<property name="maxAge" value="7200000" /><!-- two hours -->
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="5" />
+		<property name="minIdle" value="2" />
+		<property name="defaultAutoCommit" value="false" />
+		<property name="commitOnReturn" value="true" />
+		<property name="initSQL" value="SET SCHEMA PUBLIC" />
+	</bean>
+
+	<!-- DataSource into which the CSV files should be cached -->
+	<bean id="csvJdbcDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:mem:csv;DB_CLOSE_DELAY=-1" />
+		<property name="username" value="sa" />
+		<property name="password" value="sa" />
+		<property name="initialSize" value="5" />
+		<property name="maxAge" value="7200000" /><!-- two hours -->
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="5" />
+		<property name="minIdle" value="2" />
+		<property name="defaultAutoCommit" value="false" />
+		<property name="commitOnReturn" value="true" />
+		<property name="initSQL" value="SET SCHEMA PUBLIC" />
+	</bean>
+	
+	<!-- JDBC DataSource into which the FixedWidthHashMapLoader files should be cached -->
+	<bean id="fixedWidthJdbcDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:mem:fw;DB_CLOSE_DELAY=-1" />
+		<property name="username" value="sa" />
+		<property name="password" value="sa" />
+		<property name="initialSize" value="5" />
+		<property name="maxAge" value="7200000" /><!-- two hours -->
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="5" />
+		<property name="minIdle" value="2" />
+		<property name="defaultAutoCommit" value="false" />
+		<property name="commitOnReturn" value="true" />
+		<property name="initSQL" value="SET SCHEMA PUBLIC" />
+	</bean>
+
+	<bean id="loaderJdbcDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+		<property name="driverClassName" value="com.ibm.as400.access.AS400JDBCDriver" />
+		<property name="url" value="jdbc:as400:10.2.0.7/AQHPRDTEST;prompt=false;" />
+		<property name="username" value="AQAPP70" />
+		<property name="password" value="PRDAPP702" />
+		<!--property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url" value="jdbc:sqlserver://10.2.0.53:1433;databaseName=v2extract_mig" />
+		<property name="username" value="v2extract_mig" />
+		<property name="password" value="v2extract_mig" /-->
+		<property name="initialSize" value="5" />
+		<property name="maxAge" value="7200000" /><!-- two hours -->
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="5" />
+		<property name="minIdle" value="2" />
+		<property name="defaultAutoCommit" value="false" />
+		<property name="commitOnReturn" value="true" />
+		<!-- The SQL that should be run immediately upon obtaining a new Connection 
+		<property name="initSQL" value="" />  -->
+		<property name="validationQuery" value="SELECT 1 FROM sysibm.sysdummy1"/>
+		<!--property name="validationQuery" value="SELECT 1"/-->  
+	</bean>
+
+	<bean id="storageJdbcDataSource" class="org.apache.tomcat.jdbc.pool.DataSource"	destroy-method="close">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url" value="jdbc:sqlserver://10.2.0.53:1433;databaseName=v4mig" />
+		<property name="username" value="v4mig" />
+		<property name="password" value="v4mig" />
+		<!--property name="driverClassName" value="com.mysql.jdbc.Driver" /-->
+		<!--property name="url" value="jdbc:mysql://10.2.0.62/v2extract" /-->
+		<!--property name="username" value="v2extract" /-->
+		<!--property name="password" value="v2extract" /-->
+		<property name="initialSize" value="5" />
+		<property name="maxAge" value="7200000" /><!-- two hours -->
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="5" />
+		<property name="minIdle" value="2" />
+		<property name="defaultAutoCommit" value="false" />
+		<property name="commitOnReturn" value="true" />
+		<!-- The SQL that should be run immediately upon obtaining a new Connection -->
+		<!-- property name="initSQL" value="" / -->
+	</bean>
+
+	<bean id="logStorageJdbcDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url" value="jdbc:sqlserver://10.2.0.53:1433;databaseName=v4log" />
+		<property name="username" value="v4mig" />
+		<property name="password" value="v4mig" />
+		<!--<property name="driverClassName" value="com.mysql.jdbc.Driver" /-->
+		<!--<property name="url" value="jdbc:mysql://10.2.0.62/v4aud" /-->
+		<!--<property name="username" value="v4aud" /-->
+		<!--<property name="password" value="v4aud" /-->
+		<property name="initialSize" value="5" />
+		<property name="maxAge" value="7200000" /><!-- two hours -->
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="5" />
+		<property name="minIdle" value="2" />
+		<property name="defaultAutoCommit" value="false" />
+		<property name="commitOnReturn" value="true" />
+		<!-- The SQL that should be run immediately upon obtaining a new Connection -->
+		<!-- property name="initSQL" value="" / -->
+	</bean>
+
+	
+	<!-- BEGIN AUDIT LOG ARCHIVER SETTINGS -->
+	
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	      <property name="dataSource" ref="logStorageJdbcDataSource" />
+	      <property name="packagesToScan" value="com.maketechnologies.dmw.archiver.entities" />
+	      <property name="jpaVendorAdapter">
+	         <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+	      </property>
+	      <property name="jpaProperties">
+	         <props>
+	            <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+	            <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
+	            <!-- prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop -->
+	         </props>
+	      </property>
+	</bean>
+	
+	
+	<!-- POSSIBLE LOADERS -->
+
+	<!-- The caching loader needs to be configured with the loader that it's wrapping if you want to use asynchronous loading -->
+	<bean id="cachingLoader" class="com.maketechnologies.dmw.transformer.data.CachingLoader" scope="prototype">
+		<property name="wrappedLoader" ref="multiplexingLoader"/>
+		<property name="queueCapacity" value="40000"/>
+	</bean>
+
+	<!-- The multiplexing loader will go through each of the referenced loaders in the order given when loading -->
+	<bean id="multiplexingLoader" class="com.maketechnologies.dmw.transformer.data.loader.MultiplexingLoader" scope="prototype">
+		<property name="loaders">
+			<list>
+				<ref bean="jdbcHashMapLoaderAs400" />
+				<ref bean="csvHashMapLoader" />
+				<ref bean="excelHashMapLoader" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="jdbcHashMapLoaderAs400" class="com.maketechnologies.dmw.transformer.data.loader.JdbcHashMapLoader" scope="prototype">
+		<property name="dataSource" ref="loaderJdbcDataSource"/>
+		<property name="fetchSize" value="1000"/>
+	</bean>
+	<bean id="jdbcXomLoader" class="com.maketechnologies.dmw.transformer.data.loader.JdbcXomStreamStripLoader" scope="prototype">
+		<property name="dataSource" ref="loaderJdbcDataSource"/>
+		<property name="fetchSize" value="1000"/>
+	</bean>
+	<bean id="excelHashMapLoader" class="com.maketechnologies.dmw.transformer.data.excel.ExcelHashMapLoader" scope="prototype">
+		<property name="jdbcDataSource" ref="excelJdbcDataSource"/>
+		<property name="trimRecords" value="true"/>
+		<property name="inputPath" value="dataLoad-seedData"/>
+	</bean>
+	<bean id="excelXomLoader" class="com.maketechnologies.dmw.transformer.data.excel.ExcelXomLoader" scope="prototype">
+		<property name="trimRecords" value="true"/>
+		<property name="inputPath" value="dataLoad-seedData"/>
+	</bean>
+	<bean id="csvHashMapLoader" class="com.maketechnologies.dmw.transformer.data.csv.CsvHashMapLoader" scope="prototype">
+		<property name="jdbcDataSource" ref="csvJdbcDataSource"/>
+		<property name="trimRecords" value="true"/>
+		<property name="delimiter" value=","/>
+		<property name="textQualifier" value="&quot;"/>
+		<property name="charSet" value="UTF-8"/>
+		<property name="inputPath" value="dataLoad"/>
+	</bean>
+	<bean id="csvXomLoader" class="com.maketechnologies.dmw.transformer.data.csv.CsvXomLoader" scope="prototype">
+		<property name="trimRecords" value="true"/>
+		<property name="delimiter" value=","/>
+		<property name="textQualifier" value="&quot;"/>
+		<property name="charSet" value="UTF-8"/>
+		<property name="inputPath" value="dataLoad"/>
+	</bean>
+
+	<bean id="adamagicCsvLoader" class="com.maketechnologies.dmw.transformer.data.loader.AdamagicCsvLoader" scope="prototype"/>
+	
+	<bean id="fixedWidthHashMapLoader" class="com.maketechnologies.dmw.transformer.data.fixedwidth.FixedWidthHashMapLoader" scope="prototype">
+		<property name="jdbcDataSource" ref="fixedWidthJdbcDataSource"/>
+		<property name="recordPrefixSeparator" value=","/>
+		<property name="fileExtension" value=".dat"/>
+		<property name="trimRecords" value="true"/>
+		<property name="charSet" value="UTF-8"/>
+		<property name="inputPath" value="dataLoad"/>
+		<!-- If 'true', the fixed width loader will assume that there is a prefix on data rows (a number followed by a comma) that should be stripped out. -->
+		<property name="stripRecordPrefix" value="false"/>
+	</bean>
+	<bean id="fixedWidthXomLoader" class="com.maketechnologies.dmw.transformer.data.fixedwidth.FixedWidthXomLoader" scope="prototype">
+		<property name="trimRecords" value="true"/>
+		<property name="charSet" value="UTF-8"/>
+		<property name="inputPath" value="dataLoad"/>
+		<!-- If 'true', the fixed width loader will assume that there is a prefix on data rows (a number followed by a comma) that should be stripped out. -->
+		<property name="stripRecordPrefix" value="false"/>
+	</bean>
+	
+	<bean id="fileXomLoader" class="com.maketechnologies.dmw.transformer.data.xom.XomLoaderImpl" scope="prototype"/>
+
+
+	<!-- POSSIBLE DATA STORAGE CLASSES -->
+	
+	<bean id="h2DataStorage" class="com.maketechnologies.dmw.transformer.data.storage.H2DataStorageImpl"/>
+	<bean id="oracleDataStorage" class="com.maketechnologies.dmw.transformer.data.storage.OracleDataStorageImpl"/>
+	<bean id="db2DataStorage" class="com.maketechnologies.dmw.transformer.data.storage.Db2DataStorageImpl"/>
+	<bean id="mysqlDataStorage" class="com.maketechnologies.dmw.transformer.data.storage.MySQLDataStorage"/>
+	<bean id="mssqlDataStorage" class="com.maketechnologies.dmw.transformer.data.storage.SqlServerDataStorageImpl"/>
+	<bean id="postgresDataStorage" class="com.maketechnologies.dmw.transformer.data.storage.PostgresqlDataStorageImpl"/>
+	
+	
+	<!-- POSSIBLE LOG STORAGE CLASSES -->
+	
+	<!--bean id="logStorage" class="com.maketechnologies.dmw.transformer.data.storage.log.JdbcLogStorageImpl2"/-->
+	<bean id="logStorage" class="com.maketechnologies.dmw.transformer.data.storage.log.JdbcLogStorageImpl2Logic"/>
+	
+	
+	<!-- KEY MAP FACTORIES -->
+	
+	<!-- memoryKeyMapFactory creates all keymaps in memory -->
+	<bean id="memoryKeyMapFactory" class="com.maketechnologies.dmw.transformer.keymap.jvm.MemoryKeyMapFactory"/>
+	
+	<!-- tokyoCabinetKeyMapFactory creates all keymaps using the TokyoCabinet libraries -->
+	<bean id="tokyoCabinetKeyMapFactory" class="com.maketechnologies.dmw.transformer.keymap.tokyocabinet.TokyoCabinetKeyMapFactory">
+		<property name="inMemoryMaps" value="true"/> <!-- Whether TC should keep its maps entirely in memory -->
+		<property name="bucketSize" value="131071"/> <!-- The size of the hashmap buckets. Ideally 0.5x to 4x the number of elements in the map. -->
+		<property name="mapMemorySize" value="67108864"/> <!-- How much of each TokyoCabinet hashmap file is cached in memory (in bytes). Calls hdb.setxmsiz(). -->
+		<property name="maxNumCachedRecords" value="10000"/> <!-- The max number of records that a TokyoCabinet Map can hold in memory (calls hdb.setcache()) -->
+		<property name="btreeMapNames" value=""/> <!-- Comma-delimited list of map names to be created with btrees. These are map names without the filename suffix, e.g. '_FeederAccessPoint_sysId_keyByTargetValue' -->
+		<property name="customMapNames" value=""/> <!-- Comma-delimited list of TokyoCabinet map filenames that, upon creation, should be treated with custom tuning parameters. Used typically for above-average-sized	maps. -->
+		<property name="customMapMemorySize" value="67108864"/> <!-- How much of each custom TokyoCabinet hashmap file is cached in memory (in bytes). Calls hdb.setxmsiz(). -->
+		<property name="customMapMaxNumCachedRecords" value="10000"/> <!-- The max number of records that a custom TokyoCabinet Map can hold in memory (calls hdb.setcache()) -->
+		<property name="btreeMapMemorySize" value="300"/> <!-- How much of each TokyoCabinet BTree file is cached in memory (in MB). Calls bdb.setxmsiz() after multiplying by 1024*1024. -->
+	</bean>
+
+	
+	<!-- SESSION CONFIGURATION -->
+	
+	<bean id="dmwSession" class="com.maketechnologies.dmw.transformer.DmwSession">
+		<property name="dmwEnvironment" ref="dmwEnvironment"/>
+
+		<property name="metricRegistry" ref="metricRegistry"/>
+		
+		<!-- keyMapFactory creates the maps for surrogate and foreign key mapping. The chosen KeyMapFactory determines how the maps are created.-->
+		<property name="keyMapFactory" ref="memoryKeyMapFactory"/>
+		
+		<!-- The class to use for data storage is typically database-dependent -->
+		<property name="dataStorage" ref="mssqlDataStorage"/>
+		
+		<!-- The class to use for log storage is typically NOT database-dependent -->
+		<property name="logStorage" ref="logStorage"/>
+	</bean>
+
+	
+	<!-- DMW ENVIRONMENT CONFIGURATION -->
+	
+	<bean id="dmwEnvironment" class="com.maketechnologies.dmw.transformer.DmwEnvironment">
+	
+		<!-- Indicate if schema validation is to be performed - defaults to true -->
+		<property name="schemaValidationFlag" value="true" />
+
+		<!-- The relative path to the input schema -->
+		<property name="inputSchemaPath" value="../equusDomain/model/AQHMDL_PCA.dm" />
+
+		<!-- The relative path to the output schema -->
+		<property name="outputSchemaPath" value="../equusDomain/model/AQHDAT_FCA.dm" />
+
+		<!-- The relative path to the DMT. -->
+		<property name="dmtPath" value="../equusDomain/model/AQH_V4_Transform.dmt" />
+		
+		<!-- "The absolute path to the folder from which all relative paths are 
+			resolved. If not specified, the current working directory is used. -->
+		<property name="dmwHome" value="dmw-transformer" />
+
+		<!-- The relative path to the folder containing Adabas DDMs -->
+		<property name="adabasDdmDir" value="" />
+
+		<!-- The maximum number of records to store per-transform. -1 indicates 
+			no limit. -->
+		<property name="globalRecordCap" value="-1" />
+
+		<!-- The maximum number of input records to transform per table. -1 indicates 
+			no limit. -->
+		<property name="globalInputRecordCap" value="-1" />
+
+		<!-- The relative path to the FCA DDL, which is used to initialize the 
+			storage database. -->
+		<property name="fcaDDL" value="" />
+
+		<!-- The file name suffix for Adamagic CSV files -->
+		<property name="adamagicCsvSuffix" value="" />
+
+		<!-- The relative path containing pre-transform SQL scripts. -->
+		<property name="preTransformScriptDir" value="fca-PreLoadScript" />
+
+		<!-- The relative path containing post-transform SQL scripts. -->
+		<property name="postTransformScriptDir" value="fca-PostLoadScript" />
+
+		<!-- "Enable/disable asynchronous storage. Asynchronous storage permits 
+			storage to write to the persistent store (eg: database) in the background. -->
+		<!-- DEPRECATED config flag (per Tom 26Jun2015)  Always uses cachingDataStorer   -->
+		<property name="asynchronousStorage" value="true" />
+
+		<!-- The concurrency level to use while processing transforms. The default 
+			is set to the number of available processors. -->
+		<property name="transformsConcurrency" value="4" />
+
+		<!-- Enable/disable referential integrity enforcement. -->
+		<property name="enforceReferentialIntegrity" value="true" />
+
+		<!-- Indicate if the transformer should continue if JDBC constraints fail to be enabled -->
+		<property name="continueOnConstraintError" value="true" />
+
+		<!-- The reference to the loader bean. If you want asynchronous loading, this should be the caching loader implementation. -->
+		<!-- For AQHA, choke point is in storage so just use direct loading no need to call cachingLoader  -->
+		<property name="loaderBeanName"	value="multiplexingLoader"  />
+
+		<!-- The interval in milliseconds at which statistics are output to log. 0 means no output. -->
+		<property name="statisticsLogInterval" value="3600000" />
+
+		<!-- If true the statistics server will be enabled, which permits in-process 
+			and remote monitoring clients to monitor the transformer. -->
+		<property name="statisticsServerEnabled" value="false" />
+
+		<!-- The default JDBC batch size, an advisory setting for JDBC-based storage 
+			implementations. Greater than 20 is an illegal value. -->
+		<property name="defaultJdbcBatchSize" value="1000" />
+
+		<!-- The maximum number of outstanding records beyond which JDBC batches 
+			are flushed regardless of batch size. -->
+		<property name="defaultJdbcMaximumOutstandingRecordCount" value="500" />
+
+		<!-- When true, JDBC batch flushing is aggressive. Batches are flushed 
+			with a high frequency in order to minimize memory usage. -->
+		<property name="defaultJdbcFlushBatchesOnEveryCall" value="false" />
+
+		<!-- The default JDBC statement commit frequency. A frequency of 1 indicates 
+			after every statement. -->
+		<property name="defaultJdbcCommitFrequency" value="100" />
+
+		<!-- The maximum number of times a prepared statement may be used before 
+			it is closed. Setting this value to a low positive number can help with JDBC 
+			drivers that are buggy or cause memory leaks. -->
+		<property name="defaultJdbcMaximumPreparedStatementUses"
+			value="2147483647" />
+
+		<!-- Indicate if JDBC data sources should propagate 'where' criteria to the database when selecting input data. -->
+		<property name="disableJdbcCriteria" value="false" />
+
+		<!-- The maximum number of allowable outstanding storage requests. -->
+		<property name="asynchronousStorageMaxQueueSize" value="5" />
+
+		<!-- If true, errors in the DMT cause the process to fail and exit -->
+		<property name="strictDmtValidation" value="true" />
+
+		<!-- The frequency with which the in-memory record cache is checked for 
+			exceeding its maximum size. -->
+		<property name="storerRecordCacheFlushFrequency" value="100" />
+
+		<!-- The maximum size of the in-memory record cache. This cache is before 
+			the storage. -->
+		<property name="storerRecordCacheSize" value="100" />
+
+		<property name="preferredRulePlan">
+			<util:constant
+				static-field="com.maketechnologies.dmw.transformer.rules.Rule.Plan.FIELD_BASED" />
+		</property>
+
+		<!-- -->
+		<property name="defaultForeignKeyViolationPolicy">
+			<util:constant
+				static-field="com.maketechnologies.dmw.transformer.rules.ForeignKey.ViolationPolicy.PURGE" />
+		</property>
+
+		<!-- Indicate if tables should be truncated on init -->
+		<property name="truncateTables" value="false" />
+
+		<!-- The relative path to a temporary folder used for temporary file storage. 
+			If not specified, a sub-folder under the default java temp folder will be 
+			used. -->
+		<property name="tempPath" value="" />
+
+		<!-- Indicates whether or not to run the pre migration scripts. -->
+		<property name="runPreScripts" value="false" />
+
+		<!-- Indicates whether or not to run the post migration scripts. -->
+		<property name="runPostScripts" value="false" />
+
+		<!-- Indicates whether or not to validate the DMT when loading. -->
+		<property name="validateDmt" value="true" />
+
+		<!-- Path for secondary configuration files needed for casters, etc. -->
+		<property name="secondaryConfigPath" value="." />
+
+		<!-- Report the source record UIDs during FK violation logging. Disabling 
+			this can have performance benefits. -->
+		<property name="reportFKSourceUids" value="true" />
+
+		<!-- Log transform statistics to console. -->
+		<!-- property name="logStats" value="true" /-->
+
+		<!-- If set to true, DMW will ignore the fca-ddl property and attempt to 
+			drop all tables and recreate them based on the the output schema. -->
+		<property name="createSchema" value="true" />
+
+		<!-- If 'true', the transformer will generate description metadata DDL 
+			for tables an columns. -->
+		<property name="descriptionGenerationEnabled" value="true" />
+
+		<!-- The positive integer number at which automatically generated surrogate 
+			keys should start. Cannot be zero. If not specified then a default will be 
+			used. -->
+		<property name="startingIntegerKey" value="10000" />
+
+		<!-- If 'true', Oracle database DDL will create case-insensitive unique 
+			indexes using the NLSSORT function. -->
+		<property name="caseInsensitiveUniqueIndexes" value="false" />
+
+		<!-- Indicate if the DMW should attempt to shut down the database via the 
+			JDBC connection when finished. This option may be enabled if JDBC is used 
+			to start up an embedded database instance. -->
+		<property name="jdbcEnableDatabaseShutdown" value="false" />
+
+		<!-- Optional classpath to augment the default classpath. Directories or 
+			jars delimited by ','. If one of the entries ends with *.jar, the entry is 
+			interpreted as a directory and all jars are added to the classpath. -->
+		<property name="customClasspath" value="lib" />
+
+		<!-- Enable/disable hashmap serialization. " + "If true, the transformer 
+			will attempt to reduce memory consumption by serializing its FK and SK hashmaps 
+			when a TransformGroup is finished with them." + "The maps will be loaded 
+			again later when required by other transforms or to do integrity checking. -->
+		<property name="serializeMaps" value="true" />
+
+		<!-- If 'true', will create views for entities that reference other entities/simple 
+			types that has Reference Attributes. -->
+		<property name="createViews" value="true" />
+
+		<!-- If 'true', will insert the view schema created as part of the view 
+			creation. Note that this property doesn't apply if the `create-views` property 
+			is false. -->
+		<property name="instantiateViews" value="false" />
+
+		<!-- The amount of time in ms to wait between polling for new Parallelizable 
+			Transforms during the transform phase. -->
+		<property name="parallelizableTransformPollingInterval"
+			value="20000" />
+
+		<!-- The amount of time in ms to wait between polling for new Parallelizable 
+			RI tables during the RI phase. -->
+
+		<property name="parallelizableRiPollingInterval" value="10000" />
+
+		<!-- The concurrency level to use while performing Referential Integrity. -->
+		<property name="referentialIntegrityConcurrency" value="1" />
+
+		<!-- True if hashmaps are to be retrieved from Long Term Storage to continue 
+			a previous migration. -->
+		<property name="continuePreviousMigration" value="false" />
+
+		<!-- True if audit logging of RI violations should be disabled. -->
+		<property name="disableRiLogging" value="false" />
+
+		<!-- The size of the CachingDataStorer cache -->
+		<property name="cachingDataStorerCacheSize" value="250000" />
+
+		<!-- The frequency with which to log the output records per second during 
+			the transform phase. -->
+		<property name="transformOrpsLogFrequency" value="10000" />
+
+		<!-- The relative path to a folder used for hashmap and index map storage -->
+		<property name="mapPath" value="" />
+
+		<!-- The SQL schema name to use in the target database -->
+		<property name="jdbcStorageSchemaName" value="dbo" />
+
+		<!-- The SQL schema name to use in the target log storage database -->
+		<property name="jdbcLogStorageSchemaName" value="dbo" />
+
+		<!-- -->
+		<property name="logStorageJdbcDataSource" ref="logStorageJdbcDataSource" />
+
+		<!-- -->
+		<property name="storageJdbcDataSource" ref="storageJdbcDataSource" />
+
+
+		<!--  archiver entity manager factory -->
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+
+		<!--  Controls archiving of previous migration run Audit information (audit logs)-->
+		<property name="archiveLogs" value="true"/>
+
+		<!-- Whether to keep Surrogate Key maps up to date during Referential Integrity checking, in preparation for future incremental migrations - defaults to true -->
+		<property name="updateKeyMaps" value="false"/>
+
+	</bean>
+</beans>

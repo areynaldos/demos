@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-model name="sample_fca" type="Logical" version="1.0" xmlns="http://www.maketechnologies.com/tlm/domain-model" xmlns:ns="http://www.maketechnologies.com/tlm/domain-model/diagram">
+	<meta-property name="diagrams">
+		<ns:diagrams>
+			<ns:diagram name="Sample All Entities">
+				<ns:entity-node background-color="16752762" entity-id="BaseEntity" x="12" y="49"/>
+				<ns:entity-node entity-id="Person" x="420" y="138"/>
+				<ns:entity-node entity-id="Role" x="219" y="108"/>
+				<ns:entity-node entity-id="Address" x="612" y="423"/>
+				<ns:entity-node entity-id="UserPrivilege" x="12" y="474"/>
+				<ns:entity-node entity-id="UserAccount" x="226" y="336"/>
+				<ns:entity-node entity-id="Country" x="732" y="182"/>
+				<ns:entity-node entity-id="Province" x="784" y="312"/>
+				<ns:entity-node background-color="16752762" entity-id="SurrogateKeyEntity" x="32" y="199"/>
+				<ns:entity-node background-color="16752762" entity-id="ReferenceEntity" x="756" y="12"/>
+				<ns:entity-node entity-id="StaffEquipment" x="396" y="468"/>
+				<ns:entity-node entity-id="ProvinceHistorical" x="888" y="444"/>
+			</ns:diagram>
+			<ns:diagram name="All Types">
+				<ns:entity-node entity-id="RoleTypeList" x="180" y="96"/>
+				<ns:entity-node entity-id="longText" x="8" y="385"/>
+				<ns:entity-node entity-id="string" x="96" y="48"/>
+				<ns:entity-node entity-id="long" x="480" y="240"/>
+				<ns:entity-node entity-id="decimal" x="672" y="45"/>
+				<ns:entity-node entity-id="string30" x="12" y="292"/>
+				<ns:entity-node entity-id="string60" x="8" y="339"/>
+				<ns:entity-node entity-id="integer1" x="540" y="92"/>
+				<ns:entity-node entity-id="long10" x="540" y="286"/>
+				<ns:entity-node entity-id="decimal13.2" x="732" y="96"/>
+				<ns:entity-node entity-id="string12" x="12" y="240"/>
+				<ns:entity-node entity-id="integer6" x="540" y="144"/>
+				<ns:entity-node entity-id="integer" x="480" y="45"/>
+				<ns:entity-node entity-id="string1" x="12" y="95"/>
+				<ns:entity-node entity-id="string2" x="13" y="147"/>
+				<ns:entity-node entity-id="stringTelephoneType" x="180" y="377"/>
+				<ns:entity-node entity-id="AddressTypeList" x="180" y="168"/>
+				<ns:entity-node entity-id="ContactMethodList" x="180" y="276"/>
+			</ns:diagram>
+			<ns:diagram name="Base Elements">
+				<ns:entity-node entity-id="BaseEntity" x="24" y="48"/>
+				<ns:entity-node entity-id="ReferenceEntity" x="264" y="180"/>
+				<ns:entity-node entity-id="SurrogateKeyEntity" x="264" y="73"/>
+			</ns:diagram>
+		</ns:diagrams>
+	</meta-property>
+	<meta-property name="validation">false</meta-property>
+	<meta-property name="name-annotations">true</meta-property>
+	<meta-property name="jpa-domain">true</meta-property>
+	<meta-property name="generation:com.maketechnologies.tlm.model.domain.gen.jpa.JpaGenerationSourceProvider">true</meta-property>
+	<meta-property name="table-name-naming-convention">UPPER_CASE_PLURALIZED</meta-property>
+	<meta-property name="column-name-naming-convention">UPPER_CASE</meta-property>
+	<meta-property name="database-identifier-max-length">30</meta-property>
+	<meta-property name="hibernate-annotations">true</meta-property>
+	<simpleType name="longText" restricts="string">
+		<constraint type="maxLength" value="2147483647"/>
+	</simpleType>
+	<simpleType name="longBinary" restricts="base64Binary">
+		<constraint type="maxLength" value="2147483647"/>
+	</simpleType>
+	<simpleType name="string30" restricts="string">
+		<constraint type="maxLength" value="30"/>
+	</simpleType>
+	<simpleType name="string60" restricts="string">
+		<constraint type="maxLength" value="60"/>
+	</simpleType>
+	<simpleType name="integer1" restricts="integer">
+		<constraint type="totalDigits" value="1"/>
+	</simpleType>
+	<simpleType name="long10" restricts="long">
+		<constraint type="totalDigits" value="10"/>
+	</simpleType>
+	<simpleType name="decimal13.2" restricts="decimal">
+		<constraint type="totalDigits" value="13"/>
+		<constraint type="fractionDigits" value="2"/>
+	</simpleType>
+	<simpleType name="string12" restricts="string">
+		<constraint type="maxLength" value="12"/>
+	</simpleType>
+	<simpleType name="integer6" restricts="integer">
+		<constraint type="totalDigits" value="6"/>
+	</simpleType>
+	<simpleType name="string1" restricts="string">
+		<constraint type="maxLength" value="1"/>
+	</simpleType>
+	<simpleType name="string2" restricts="string">
+		<constraint type="maxLength" value="2"/>
+	</simpleType>
+	<simpleType name="string6" restricts="string">
+		<constraint type="maxLength" value="6"/>
+	</simpleType>
+	<simpleType name="RoleTypeList" restricts="string">
+		<meta-property name="referenced-attr">true</meta-property>
+		<description>Types of roles in the system.</description>
+		<constraint type="enumeration" value="Admin">
+			<meta-property name="display-name">Administrator</meta-property>
+			<description>an administrator role</description>
+		</constraint>
+		<constraint type="enumeration" value="User">
+			<meta-property name="display-name">Regular User</meta-property>
+			<description>a user role</description>
+		</constraint>
+	</simpleType>
+	<simpleType name="AddressTypeList" restricts="string">
+		<meta-property name="referenced-attr">true</meta-property>
+		<description>Types of addresses for a person.</description>
+		<constraint type="enumeration" value="C">
+			<description>contact address</description>
+		</constraint>
+		<constraint type="enumeration" value="H">
+			<description>home address</description>
+		</constraint>
+		<constraint type="enumeration" value="W">
+			<description>work address</description>
+		</constraint>
+		<constraint type="enumeration" value="E">
+			<description>equipment address</description>
+		</constraint>
+	</simpleType>
+	<simpleType name="ContactMethodList" restricts="string">
+		<meta-property name="referenced-attr">true</meta-property>
+		<description>Mechanisms to contact a person.</description>
+		<constraint type="enumeration" value="Email">
+			<description>e-mail</description>
+		</constraint>
+		<constraint type="enumeration" value="Mail">
+			<description>regular (postal) mail</description>
+		</constraint>
+		<constraint type="enumeration" value="Phone">
+			<description>telephone</description>
+		</constraint>
+	</simpleType>
+	<simpleType name="stringTelephoneType" restricts="string">
+		<description>Size and format control for North American style telephone numbers.&#xd;
+Matches to 999-999-9999 or 9999999999</description>
+		<constraint type="maxLength" value="12"/>
+		<constraint type="pattern" value="(^(\d{10}|\d{3}-\d{3}-\d{4})$)"/>
+	</simpleType>
+	<entity name="BaseEntity">
+		<description>Abstract base for all entities.</description>
+		<property name="createdBy" type="string12">
+			<meta-property name="original-name">creator</meta-property>
+			<description>the username of the person who created this record</description>
+		</property>
+		<property name="createdDateTime" type="dateTime">
+			<meta-property name="original-name">createdDateTime</meta-property>
+			<description>the date/time at which this record was created</description>
+		</property>
+		<property name="modifiedBy" type="string12">
+			<meta-property name="original-name">modifier</meta-property>
+			<description>the username of the person who last modified this record</description>
+		</property>
+		<property name="modifiedDateTime" type="dateTime">
+			<meta-property name="original-name">modifiedDateTime</meta-property>
+			<description>the date/time at which this record was last modified</description>
+		</property>
+		<property name="version" type="integer6">
+			<meta-property name="original-name">version</meta-property>
+			<description>the version attribute, used for optimistic locking</description>
+		</property>
+	</entity>
+	<entity extends-entity="BaseEntity" name="SurrogateKeyEntity">
+		<description>Base entity for business data, where the system will generate a sequential value for the identifier.  Identifier has no business meaning.</description>
+		<property min-occurs="1" name="id" type="long10">
+			<meta-property name="jpa-generated-value-strategy">SEQUENCE</meta-property>
+			<meta-property name="ui-label">System ID</meta-property>
+			<description>Surrogate key, unique record identifier.</description>
+		</property>
+		<primary-key name="SurrogateKeyEntity_PK">
+			<property-ref name="id"/>
+		</primary-key>
+	</entity>
+	<entity extends-entity="BaseEntity" name="ReferenceEntity">
+		<description>Base entity for reference data (code tables)that are to be maintained by users.&#xd;
+They are primarily a list of codes and their description.&#xd;
+Some sub-class entities may have extra information attributes for their own specific purposes.&#xd;
+The display of this data in lists or drop downs should use the sortOrder and then the code value, as the default sort order for display.</description>
+		<property min-occurs="1" name="code" type="string12">
+			<description>This field represents the data value that is referenced in other elements (the lookup code).&#xd;
+&#xd;
+SHOULD BE IN UPPER CASE !!</description>
+		</property>
+		<property min-occurs="1" name="description" type="string60">
+			<meta-property name="referenced-attr">true</meta-property>
+			<description>This field represents a description of the code value.</description>
+		</property>
+		<property name="sortOrder" type="integer6">
+			<description>This field represents the ordinal value that this item is to be sorted on.</description>
+		</property>
+		<property default="true" min-occurs="1" name="activeValue" type="boolean">
+			<description>Signifies if this reference value is available for use.  Reference values can be disabled, and thus not available for use.</description>
+		</property>
+		<property name="displayName" type="string">
+			<meta-property name="transient">true</meta-property>
+			<description>Display usage attribute, to show the code + ' - ' + description together (e.g. B - Battery)</description>
+		</property>
+		<primary-key name="ReferenceEntity_PK">
+			<property-ref name="code"/>
+		</primary-key>
+	</entity>
+	<entity extends-entity="SurrogateKeyEntity" name="Person">
+		<meta-property name="original-name">Person</meta-property>
+		<description>Person of interest.  Owner of a user account.</description>
+		<property name="firstName" type="string30">
+			<meta-property name="original-name">fname</meta-property>
+			<description>the first name of the person</description>
+		</property>
+		<property min-occurs="1" name="lastName" type="string30">
+			<meta-property name="original-name">lname</meta-property>
+			<description>the Last name / Surname / Family name of the person</description>
+		</property>
+		<property name="primaryEmail" type="string60">
+			<meta-property name="original-name">email</meta-property>
+			<description>the primary email address of the person</description>
+		</property>
+		<property name="primaryTelephone" type="stringTelephoneType">
+			<meta-property name="original-name">phone</meta-property>
+			<description>the primary telephone number of the person</description>
+		</property>
+		<property default="false" name="mobileEquipmentAuthorized" type="boolean">
+			<description>A Person that is flagged as Mobile Equipment Authorized is allowed to have Staff Equipment that is not at a specific site.&#xd;
+(interpret NULL as FALSE).</description>
+		</property>
+		<property default="Email" min-occurs="1" name="primaryContactMethod" type="ContactMethodList">
+			<meta-property name="original-name">type</meta-property>
+			<description>Primary method of contact - Email, postal Mail, Phone</description>
+		</property>
+		<property name="commentText" type="longText">
+			<meta-property name="original-name">cmt</meta-property>
+		</property>
+		<property cascade-delete="true" max-occurs="2147483647" name="addresses" reverse-min-occurs="1" type="Address">
+			<meta-property name="replaces-foreign-key">Addr_Person_FK0</meta-property>
+			<meta-property name="original-foreign-key-property-name">Person_id</meta-property>
+			<meta-property name="jpa-cascade-type">REMOVE</meta-property>
+		</property>
+		<property max-occurs="2147483647" name="userAccounts" type="UserAccount">
+			<description>Nillable association, to allow for removal of Person records.</description>
+		</property>
+		<property max-occurs="2147483647" name="staffEquipments" reverse-min-occurs="1" type="StaffEquipment">
+			<description>Staff person this equipment has been alloted to.</description>
+		</property>
+		<property name="mugshotPhoto" type="longBinary">
+			<description>Photo of user person</description>
+		</property>
+		<property max-occurs="2147483647" name="manages" reverse-name="managedBy" type="Person"/>
+		<unique-key name="Person_UK1">
+			<property-ref name="primaryEmail"/>
+		</unique-key>
+		<index name="Person_IX1">
+			<property-ref name="lastName"/>
+			<property-ref name="firstName"/>
+		</index>
+		<index name="Person_IX2">
+			<property-ref name="primaryTelephone"/>
+		</index>
+	</entity>
+	<entity extends-entity="ReferenceEntity" name="Role">
+		<meta-property name="original-name">Role</meta-property>
+		<meta-property name="table-name">USER_ROLE</meta-property>
+		<description>Roles that a Person can perform in the system</description>
+		<property default="User" min-occurs="1" name="roleType" type="RoleTypeList">
+			<meta-property name="original-name">prime</meta-property>
+			<meta-property name="referenced-attr">true</meta-property>
+			<description>Identifies the System Administration Roles, versus regular User roles&#xd;
+And thus has override privileges everywhere.</description>
+		</property>
+		<property name="countOfUsers" type="integer6">
+			<meta-property name="original-name">privct</meta-property>
+			<meta-property name="transient">true</meta-property>
+			<description>Count of the number of User Accounts with this Role at this time.</description>
+		</property>
+		<property max-occurs="2147483647" name="userPrivileges" reverse-min-occurs="1" type="UserPrivilege">
+			<meta-property name="column-name">userPrivilege</meta-property>
+			<meta-property name="replaces-foreign-key">Priv_Role_FK0</meta-property>
+			<meta-property name="original-foreign-key-property-name">Role_cd</meta-property>
+		</property>
+		<property name="countOfPersons" type="integer6">
+			<meta-property name="transient">true</meta-property>
+			<description>Count of the number of Persons with this Role at this time.</description>
+		</property>
+	</entity>
+	<entity extends-entity="SurrogateKeyEntity" name="Address">
+		<meta-property name="original-name">Addr</meta-property>
+		<description>Address information for Person.&#xd;
+&#xd;
+*NOTE:* The user can select / enter one of:&#xd;
+- a Province, in which case the Country reference should also be populated by the system&#xd;
+- a Country, in which case the Province can remain null&#xd;
+- the otherProvinceCountry text, assuming no appropriate Province or Country is listed.</description>
+		<property default="C" min-occurs="1" name="addressType" type="AddressTypeList">
+			<meta-property name="original-name">type</meta-property>
+			<description>Address type - (H)ome, (W)ork, (C)ontact, (E)quipment</description>
+		</property>
+		<property min-occurs="1" name="line1" type="string60">
+			<meta-property name="original-name">line1</meta-property>
+		</property>
+		<property name="line2" type="string60">
+			<meta-property name="original-name">line2</meta-property>
+		</property>
+		<property name="city" type="string30">
+			<meta-property name="original-name">city</meta-property>
+		</property>
+		<property name="postalCode" type="string12"/>
+		<property name="otherProvinceCountry" type="string60">
+			<meta-property name="ui-label">Other Province/Country</meta-property>
+			<description>Users enter Province / Country Text if the province and / or country is not in the selection list.  Otherwise&#xd;
+- user enters a Province, in which case the Country reference is also be populated by the system&#xd;
+- user enters a Country, in which case the Province can remain null and this can be null or entered as appropriate.</description>
+		</property>
+		<property name="displayProvinceCountry" type="string60">
+			<meta-property name="transient">true</meta-property>
+			<description>Display only, derived as follows:&#xd;
+- the Province Name + ", " + Country Name, if Province is not null&#xd;
+- the Country Name, if Province is null and Country is not null&#xd;
+- the otherProvinceCountry, if Province is null and Country is null</description>
+		</property>
+		<property max-occurs="2147483647" name="staffEquipments" type="StaffEquipment">
+			<description>Site address for sited (non-mobile) equipment.&#xd;
+Mandatory for sited equipment.  Optional for mobile equipment.&#xd;
+ &#xd;
+The application screen will ensure that sited equipment, where the atSite flag is TRUE,&#xd;
+is attached to a site Address.  Otherwise, where the atSite flag is FALSE,&#xd;
+the association to an Address is acceptable but not mandatory.</description>
+		</property>
+		<unique-key name="Addr_UK0">
+			<property-ref name="person"/>
+			<property-ref name="addressType"/>
+		</unique-key>
+	</entity>
+	<entity extends-entity="SurrogateKeyEntity" name="UserPrivilege">
+		<meta-property name="original-name">Priv</meta-property>
+		<description>A Privilege is a Role assigned to a Person</description>
+		<property default="true" name="primaryRole" type="boolean">
+			<meta-property name="original-name">prime</meta-property>
+			<description>Is this the primary Role (Y/N) for the User Account?</description>
+		</property>
+		<property name="maximumAuthorization" type="decimal13.2">
+			<meta-property name="original-name">max</meta-property>
+			<description>maximum transaction dollar amount this account is authorized for as this Role.</description>
+		</property>
+		<property min-occurs="1" name="effectiveDate" type="date">
+			<meta-property name="original-name">effdat</meta-property>
+		</property>
+		<property name="expiryDate" type="date">
+			<meta-property name="original-name">expdat</meta-property>
+		</property>
+		<unique-key name="Priv_UK0">
+			<property-ref name="userAccount"/>
+			<property-ref name="role"/>
+		</unique-key>
+	</entity>
+	<entity extends-entity="ReferenceEntity" name="Country">
+		<meta-property name="original-name">Locn</meta-property>
+		<property max-occurs="2147483647" name="addresses" type="Address">
+			<meta-property name="replaces-foreign-key">Addr_Locn_FK1</meta-property>
+			<meta-property name="original-foreign-key-property-name">Locn_provcd</meta-property>
+			<description>Country of the address.&#xd;
+&#xd;
+*NOTE:* Is entered directly by the user, or should be populated by the system from the Province-Country if Province is entered.</description>
+		</property>
+		<property max-occurs="2147483647" name="provinces" reverse-min-occurs="1" type="Province"/>
+		<property max-occurs="2147483647" name="provinceHistoricals" type="ProvinceHistorical"/>
+	</entity>
+	<entity extends-entity="ReferenceEntity" name="Province">
+		<meta-property name="original-name">Locn</meta-property>
+		<property max-occurs="2147483647" name="addresses" type="Address">
+			<meta-property name="replaces-foreign-key">Addr_Locn_FK1</meta-property>
+			<meta-property name="original-foreign-key-property-name">Locn_provcd</meta-property>
+		</property>
+		<property max-occurs="2147483647" name="provinceHistoricals" reverse-name="provinceIsNow" type="ProvinceHistorical">
+			<description>Historical record of Provinces.  Address may be in current Province or Historical Province.</description>
+		</property>
+	</entity>
+	<entity extends-entity="ReferenceEntity" name="ProvinceHistorical">
+		<meta-property name="original-name">Locn</meta-property>
+		<property max-occurs="2147483647" name="addresses" type="Address">
+			<meta-property name="replaces-foreign-key">Addr_Locn_FK1</meta-property>
+			<meta-property name="original-foreign-key-property-name">Locn_provcd</meta-property>
+		</property>
+		<property max-occurs="2147483647" name="spannedProvinces" reverse-name="spanningProvinceHistorical" type="Province">
+			<meta-property name="jpa-join-column">SPANNING_PROVINCE_HIST_CODE</meta-property>
+		</property>
+	</entity>
+	<entity extends-entity="SurrogateKeyEntity" name="UserAccount">
+		<description>System account for a person.&#xd;
+Note that _system_ type accounts can exist which are not associated to a real person.</description>
+		<property cascade-delete="true" max-occurs="2147483647" name="userPrivileges" reverse-min-occurs="1" type="UserPrivilege">
+			<meta-property name="replaces-foreign-key">Priv_Person_FK1</meta-property>
+			<meta-property name="original-foreign-key-property-name">Person_id</meta-property>
+			<description>User Privileges are assigned to User Accounts to enable application functionality.</description>
+		</property>
+		<property max-occurs="1" name="primaryUserPrivilege" reverse-min-occurs="1" reverse-traversible="false" type="UserPrivilege">
+			<meta-property name="replaces-foreign-key">Priv_Person_FK1</meta-property>
+			<meta-property name="original-foreign-key-property-name">Person_id</meta-property>
+			<meta-property name="transient">true</meta-property>
+			<description>Derived (transient) association - return the Primary Role privilege for the Account.</description>
+		</property>
+		<property min-occurs="1" name="userName" type="string12">
+			<meta-property name="original-name">sysnm</meta-property>
+			<meta-property name="ui-sample-data">Sample Name1;Sample Name2</meta-property>
+			<description>System user account name for this person</description>
+		</property>
+		<property default="false" min-occurs="1" name="accountExpired" type="boolean">
+			<description>A User Account that is flagged as expired is not allowed to authenticate.&#xd;
+It is kept for historical purposes to see the Privileges that it had.</description>
+		</property>
+		<unique-key name="UserAccount_UK0">
+			<property-ref name="userName"/>
+		</unique-key>
+	</entity>
+	<entity extends-entity="SurrogateKeyEntity" name="StaffEquipment">
+		<description>User Equipment, physically sited (at their address) and / or non-sited (mobile)</description>
+		<property min-occurs="1" name="equipmentId" type="long10">
+			<meta-property name="jpa-generated-value-strategy">SEQUENCE</meta-property>
+			<meta-property name="ui-label">System ID</meta-property>
+			<description>Equipment identifier number, stamped into the tag on the item.</description>
+		</property>
+		<property name="description" type="string60">
+			<description>description of the equipment</description>
+		</property>
+		<property name="serialNumber" type="string30">
+			<description>equipment manufacturer serial number</description>
+		</property>
+		<property name="atSite" type="boolean">
+			<description>Is this equipment at the staff persons site (Y) or mobile (N)?</description>
+		</property>
+		<unique-key name="StaffEquipment_UK0">
+			<property-ref name="equipmentId"/>
+		</unique-key>
+	</entity>
+</domain-model>
+
