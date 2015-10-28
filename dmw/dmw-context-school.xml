@@ -94,7 +94,7 @@
 
 	<bean id="storageJdbcDataSource" class="org.apache.tomcat.jdbc.pool.DataSource"	destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost/demotarg" />
+		<property name="url" value="jdbc:mysql://localhost:3306/demotarg" />
 		<property name="username" value="demotarg" />
 		<property name="password" value="demotarg" />
 		<property name="initialSize" value="5" />
@@ -110,7 +110,7 @@
 
 	<bean id="logStorageJdbcDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost/demolog" />
+		<property name="url" value="jdbc:mysql://localhost:3306/demolog" />
 		<property name="username" value="demolog" />
 		<property name="password" value="demolog" />
 		<property name="initialSize" value="5" />
@@ -136,8 +136,8 @@
 	      <property name="jpaProperties">
 	         <props>
 	            <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
-	            <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
-	            <!-- prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop -->
+	            <!-- prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop-->
+	            <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
 	         </props>
 	      </property>
 	</bean>
@@ -264,7 +264,7 @@
 		<property name="keyMapFactory" ref="memoryKeyMapFactory"/>
 		
 		<!-- The class to use for data storage is typically database-dependent -->
-		<property name="dataStorage" ref="mssqlDataStorage"/>
+		<property name="dataStorage" ref="mysqlDataStorage"/>
 		
 		<!-- The class to use for log storage is typically NOT database-dependent -->
 		<property name="logStorage" ref="logStorage"/>
@@ -279,13 +279,13 @@
 		<property name="schemaValidationFlag" value="true" />
 
 		<!-- The relative path to the input schema -->
-		<property name="inputSchemaPath" value="../equusDomain/model/AQHMDL_PCA.dm" />
+		<property name="inputSchemaPath" value="../domainModel/school_pca.dm" />
 
 		<!-- The relative path to the output schema -->
-		<property name="outputSchemaPath" value="../equusDomain/model/AQHDAT_FCA.dm" />
+		<property name="outputSchemaPath" value="../domainModel/school.ldm" />
 
 		<!-- The relative path to the DMT. -->
-		<property name="dmtPath" value="../equusDomain/model/AQH_V4_Transform.dmt" />
+		<property name="dmtPath" value="../domainModel/school_dmt.dmt" />
 		
 		<!-- "The absolute path to the folder from which all relative paths are 
 			resolved. If not specified, the current working directory is used. -->
@@ -491,10 +491,10 @@
 		<property name="mapPath" value="" />
 
 		<!-- The SQL schema name to use in the target database -->
-		<property name="jdbcStorageSchemaName" value="dbo" />
+		<property name="jdbcStorageSchemaName" value="demotarg" />
 
 		<!-- The SQL schema name to use in the target log storage database -->
-		<property name="jdbcLogStorageSchemaName" value="dbo" />
+		<property name="jdbcLogStorageSchemaName" value="demolog" />
 
 		<!-- -->
 		<property name="logStorageJdbcDataSource" ref="logStorageJdbcDataSource" />
@@ -507,7 +507,7 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 
 		<!--  Controls archiving of previous migration run Audit information (audit logs)-->
-		<property name="archiveLogs" value="true"/>
+		<property name="archiveLogs" value="false"/>
 
 		<!-- Whether to keep Surrogate Key maps up to date during Referential Integrity checking, in preparation for future incremental migrations - defaults to true -->
 		<property name="updateKeyMaps" value="false"/>

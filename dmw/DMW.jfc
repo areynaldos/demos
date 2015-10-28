@@ -397,11 +397,11 @@
   <producer uri="http://www.oracle.com/hotspot/jfr-info/" label="Oracle JDK">
 
     <event path="recordings/recording">
-      <setting name="enabled">true</setting>
+      <setting name="enabled">false</setting>
     </event>
 
     <event path="recordings/recording_setting">
-      <setting name="enabled">true</setting>
+      <setting name="enabled">false</setting>
     </event>
 
   </producer>

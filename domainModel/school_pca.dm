@@ -5,32 +5,28 @@
 			<ns:diagram name="Diagram">
 				<ns:entity-node entity-id="BaseEntity" x="143" y="48"/>
 				<ns:entity-node entity-id="Person" x="276" y="264"/>
-				<ns:entity-node entity-id="Role" x="48" y="296"/>
 				<ns:entity-node entity-id="RoleType" x="331" y="139"/>
 				<ns:entity-node entity-id="LongText" x="331" y="48"/>
 			</ns:diagram>
 			<ns:diagram name="New Diagram" showIcons="true">
 				<ns:entity-node entity-id="Person" x="434" y="324"/>
-				<ns:entity-node entity-id="Role" x="180" y="228"/>
 				<ns:entity-node entity-id="BaseEntity" showConstraints="false" showForeignKeyProperties="false" showProperties="true" showTransientProperties="false" x="432" y="72"/>
-				<ns:entity-node entity-id="Address" x="768" y="228"/>
 			</ns:diagram>
 			<ns:diagram name="Base Entities">
 				<ns:entity-node entity-id="BaseEntity" x="937" y="48"/>
 				<ns:entity-node entity-id="string" x="406" y="48"/>
-				<ns:entity-node entity-id="CommentsType" x="282" y="167"/>
-				<ns:entity-node entity-id="AddressTypeEnum" x="48" y="167"/>
 				<ns:entity-node entity-id="FinalGradeEnum" x="499" y="167"/>
 				<ns:entity-node entity-id="HoursPerDayType" x="937" y="256"/>
 				<ns:entity-node entity-id="RoleType" x="721" y="167"/>
 			</ns:diagram>
 			<ns:diagram name="School">
-				<ns:entity-node entity-id="Class" x="424" y="274"/>
+				<ns:entity-node entity-id="Class" x="420" y="144"/>
 				<ns:entity-node entity-id="ClassEnrolment" x="696" y="144"/>
 				<ns:entity-node entity-id="FinalGradeEnum" x="696" y="403"/>
-				<ns:entity-node entity-id="HoursPerDayType" x="692" y="310"/>
+				<ns:entity-node entity-id="HoursPerDayType" x="1008" y="403"/>
 				<ns:entity-node entity-id="Person" x="944" y="150"/>
-				<ns:entity-node entity-id="Subject" x="168" y="290"/>
+				<ns:entity-node entity-id="Subject" x="252" y="144"/>
+				<ns:entity-node entity-id="ClassScheduleEnum" x="840" y="403"/>
 			</ns:diagram>
 		</ns:diagrams>
 	</meta-property>
@@ -45,21 +41,6 @@
 	</simpleType>
 	<simpleType name="LongText" restricts="string">
 		<constraint type="maxLength" value="2147483647"/>
-	</simpleType>
-	<simpleType name="CommentsType" restricts="string">
-		<constraint type="maxLength" value="200"/>
-	</simpleType>
-	<simpleType name="AddressTypeEnum" restricts="string">
-		<constraint type="maxLength" value="1"/>
-		<constraint type="enumeration" value="H">
-			<meta-property name="display-name">Home</meta-property>
-		</constraint>
-		<constraint type="enumeration" value="W">
-			<meta-property name="display-name">Work</meta-property>
-		</constraint>
-		<constraint type="enumeration" value="M">
-			<meta-property name="display-name">Mailing</meta-property>
-		</constraint>
 	</simpleType>
 	<simpleType name="FinalGradeEnum" restricts="string">
 		<constraint type="maxLength" value="1"/>
@@ -110,19 +91,6 @@
 		<primary-key name="BaseEntity_PK">
 			<property-ref name="id"/>
 		</primary-key>
-	</entity>
-	<entity extends-entity="BaseEntity" name="Role">
-		<property name="type" type="RoleType"/>
-		<unique-key name="Role_UK0">
-			<property-ref name="type"/>
-		</unique-key>
-	</entity>
-	<entity extends-entity="BaseEntity" name="Address">
-		<property name="province" type="string"/>
-		<property name="city" type="string"/>
-		<property min-occurs="1" name="streetName" type="string"/>
-		<property name="streetNumber" type="string"/>
-		<property name="addressType" type="AddressTypeEnum"/>
 	</entity>
 	<entity name="Class">
 		<property name="classId" type="string"/>

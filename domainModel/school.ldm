@@ -2,28 +2,10 @@
 <domain-model name="school" type="Logical" version="1.0" xmlns="http://www.maketechnologies.com/tlm/domain-model" xmlns:ns="http://www.maketechnologies.com/tlm/domain-model/diagram">
 	<meta-property name="diagrams">
 		<ns:diagrams>
-			<ns:diagram name="Diagram">
-				<ns:entity-node entity-id="BaseEntity" x="143" y="48"/>
-				<ns:entity-node entity-id="Person" x="276" y="264"/>
-				<ns:entity-node entity-id="Role" x="48" y="296"/>
-				<ns:entity-node entity-id="RoleType" x="331" y="139"/>
-				<ns:entity-node entity-id="LongText" x="331" y="48"/>
-			</ns:diagram>
-			<ns:diagram name="New Diagram" showIcons="true">
-				<ns:entity-node entity-id="Person" x="434" y="324"/>
-				<ns:entity-node entity-id="Role" x="180" y="228"/>
-				<ns:entity-node entity-id="BaseEntity" showConstraints="false" showForeignKeyProperties="false" showProperties="true" showTransientProperties="false" x="432" y="72"/>
-				<ns:entity-node entity-id="Address" x="768" y="228"/>
-			</ns:diagram>
-			<ns:diagram name="Base Entities">
-				<ns:entity-node entity-id="BaseEntity" x="168" y="120"/>
-				<ns:entity-node entity-id="string" x="509" y="132"/>
-				<ns:entity-node entity-id="CommentsType" x="509" y="204"/>
-			</ns:diagram>
 			<ns:diagram name="School">
 				<ns:entity-node entity-id="Teacher" x="55" y="240"/>
 				<ns:entity-node entity-id="Subject" x="55" y="432"/>
-				<ns:entity-node entity-id="Class" x="424" y="274"/>
+				<ns:entity-node entity-id="SubjectClass" x="424" y="274"/>
 				<ns:entity-node entity-id="Student" x="337" y="71"/>
 				<ns:entity-node entity-id="ClassEnrolment" x="636" y="180"/>
 				<ns:entity-node entity-id="FinalGradeEnum" x="696" y="403"/>
@@ -33,21 +15,6 @@
 			</ns:diagram>
 		</ns:diagrams>
 	</meta-property>
-	<simpleType name="RoleType" restricts="string">
-		<description>Types of roles in the system.</description>
-		<constraint type="enumeration" value="Administrator">
-			<description>the administrator role</description>
-		</constraint>
-		<constraint type="enumeration" value="User">
-			<description>the user role</description>
-		</constraint>
-	</simpleType>
-	<simpleType name="LongText" restricts="string">
-		<constraint type="maxLength" value="2147483647"/>
-	</simpleType>
-	<simpleType name="CommentsType" restricts="string">
-		<constraint type="maxLength" value="200"/>
-	</simpleType>
 	<simpleType name="AddressTypeEnum" restricts="string">
 		<constraint type="maxLength" value="1"/>
 		<constraint type="enumeration" value="H">
@@ -110,52 +77,12 @@
 			<property-ref name="id"/>
 		</primary-key>
 	</entity>
-	<entity extends-entity="BaseEntity" name="Person">
-		<description>Main Person entity</description>
-		<property name="userName">
-			<simpleType restricts="string">
-				<constraint type="maxLength" value="12"/>
-				<constraint type="length" value="12"/>
-			</simpleType>
-		</property>
-		<property name="firstName" type="string">
-			<description>the first name of the person</description>
-		</property>
-		<property name="lastName" type="string">
-			<description>the last name of the person</description>
-		</property>
-		<property name="email" type="string">
-			<description>the email address of the person</description>
-		</property>
-		<property max-occurs="2147483647" name="Roles" reverse-max-occurs="2147483647" type="Role"/>
-		<property name="address" reverse-min-occurs="1" type="Address"/>
-		<property name="workAddress" type="Address"/>
-		<property name="comments" type="CommentsType">
-			<meta-property name="jpa-fetch-type">LAZY</meta-property>
-		</property>
-		<unique-key name="Person_UK0">
-			<property-ref name="userName"/>
-		</unique-key>
-	</entity>
-	<entity extends-entity="BaseEntity" name="Role">
-		<property name="type" type="RoleType"/>
-		<unique-key name="Role_UK0">
-			<property-ref name="type"/>
-		</unique-key>
-	</entity>
-	<entity extends-entity="BaseEntity" name="Address">
-		<property name="province" type="string"/>
-		<property name="city" type="string"/>
-		<property min-occurs="1" name="streetName" type="string"/>
-		<property name="streetNumber" type="string"/>
-		<property name="addressType" type="AddressTypeEnum"/>
-	</entity>
 	<entity extends-entity="BaseEntity" name="Teacher">
 		<property name="payrollId" type="string"/>
 		<property name="firstName" type="string"/>
 		<property name="lastName" type="string"/>
 		<property name="telephoneNumber" type="string"/>
-		<property max-occurs="2147483647" name="classes" reverse-min-occurs="1" type="Class">
+		<property max-occurs="2147483647" name="subjectClasses" reverse-min-occurs="1" type="SubjectClass">
 			<meta-property name="jpa-join-column">teacher_id</meta-property>
 		</property>
 		<unique-key name="Teacher_UK0">
@@ -169,12 +96,12 @@
 	<entity extends-entity="BaseEntity" name="Subject">
 		<property name="code" type="string"/>
 		<property name="description" type="string"/>
-		<property max-occurs="2147483647" name="classes" reverse-min-occurs="1" type="Class"/>
+		<property max-occurs="2147483647" name="subjectClasses" reverse-min-occurs="1" type="SubjectClass"/>
 		<unique-key name="Subject_UK0">
 			<property-ref name="code"/>
 		</unique-key>
 	</entity>
-	<entity extends-entity="BaseEntity" name="Class">
+	<entity extends-entity="BaseEntity" name="SubjectClass">
 		<property name="classId" type="string"/>
 		<property name="schedule" type="ClassScheduleEnum"/>
 		<property name="hoursPerDay" type="HoursPerDayType"/>

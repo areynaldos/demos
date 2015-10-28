@@ -13,31 +13,11 @@
 		<mapping action="create" target="modified"/>
 		<mapping src="$initialVersion" target="version"/>
 		<mapping action="surrogateKey" src="personId" target="id"/>
+		<mapping src="personId" target="studentId"/>
 		<mapping src="firstName" target="firstName"/>
 		<mapping src="lastName" target="lastName"/>
-		<!--	dont enforce UK		<mapping action="uniqueKey" src="email" target="primaryEmail"/>
-		-->
 		<mapping src="telephoneNumber" target="telephoneNumber"/>
 	</transform>
-	<!-- 	<field-caster language="groovy" name="ConvertYnFlag"><![CDATA[
-		// for Oracle emit true / false values
-		String cast(text){
-			if (text == 'Y')  return "true"
-			if (text == 'y')  return "true"
-			if (text == 'X')  return "true"
-			if (text == 'x')  return "true"
-			if (text == '1')  return "true"
-			if (text.toLowerCase() == "true") return "true"
-			if (text == 'N')  return "false"
-			if (text == 'n')  return "false"
-			if (text == ' ')  return "false"
-			if (text == '')   return "false"
-			if (text == '0')  return "false"
-			if (text.toLowerCase() == "false") return "false"
-			return text
-		}
-	]]></field-caster> 
-	-->
 	<field-caster language="groovy" name="ConvertYnFlag"><![CDATA[
 		// for DB2 emit 0 / 1 values
 		String cast(text){
