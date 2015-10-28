@@ -32,6 +32,14 @@
 		<mapping action="uniqueKey" src="code" target="code"/>
 		<mapping src="description" target="description"/>
 	</transform>
+	<transform src="Class" target="SubjectClass">
+		<mapping action="surrogateKey" src="classId" target="id"/>
+		<mapping src="classId" target="classId"/>
+		<mapping action="foreignKey" src="subjectCode" target="subject" key="/Subject/id"/>
+		<mapping action="foreignKey" src="teacherId" target="teacher" key="/Teacher/id"/>
+		<mapping src="schedule" target="schedule"/>
+		<mapping src="hoursPerDay" target="hoursPerDay"/>
+	</transform>
 	<field-caster language="groovy" name="ConvertYnFlag"><![CDATA[
 		// for DB2 emit 0 / 1 values
 		String cast(text){
