@@ -7,7 +7,7 @@
 #export JAVA_OPTS="-Xms$1 -Xmx$1 -XX:+AggressiveOpts -XX:+AggressiveHeap -verbose:gc -XX:-PrintGCDetails -XX:-PrintGCTimeStamps -Dlicense.dir=. -Dlog4j.configuration=file:log4j2.xml -Ddmw-context=$2 -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:FlightRecorderOptions=defaultrecording=true,disk=true,dumponexit=true,maxsize=2G,settings=DMW.jfc"
 
 # The following does not have Flight Recorder on.
-export JAVA_OPTS="-Xms$1 -Xmx$1 -XX:+AggressiveOpts -XX:+AggressiveHeap -verbose:gc -XX:-PrintGCDetails -XX:-PrintGCTimeStamps -Dlicense.dir=. -Dlog4j.configuration=file:log4j2.xml -Ddmw-context=$2
+export JAVA_OPTS="-Xms$1 -Xmx$1 -XX:+AggressiveOpts -XX:+AggressiveHeap -verbose:gc -XX:-PrintGCDetails -XX:-PrintGCTimeStamps -Dlicense.dir=. -Dlog4j.configuration=file:log4j2.xml -Ddmw-context=$2"
 
 export CLASSPATH_PREFIX=$(find lib -name '*.jar' -print | tr '\n' ':')
 echo "JAVA OPTS"
