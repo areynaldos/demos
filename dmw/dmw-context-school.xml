@@ -392,7 +392,7 @@
 		</property>
 
 		<!-- Indicate if tables should be truncated on init -->
-		<property name="truncateTables" value="false" />
+		<property name="truncateTables" value="true" />
 
 		<!-- The relative path to a temporary folder used for temporary file storage. 
 			If not specified, a sub-folder under the default java temp folder will be 
