@@ -14,5 +14,5 @@ echo "JAVA OPTS"
 echo $JAVA_OPTS
 echo "CLASSPATH_PREFIX"
 echo $CLASSPATH_PREFIX
-#export JAVA_HOME="/usr/java/jdk1.7.0_09"
+export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
 dmw-transformer/bin/dmwTransformerApp.sh -dmwHome dmw-transformer
