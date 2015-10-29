@@ -44,7 +44,7 @@
 	</transform>
 	<transform src="Book" target="Book">
 		<mapping action="uniqueKey" src="ISBN" target="ISBN" strategy="copy"/>
-		<mapping src="Title" target="Title"/>
+		<mapping src="title" target="Title"/>
 		<mapping action="foreignKey" src="subjectCode" target="subject" key="/Subject/id via alternateCode"/>
 	</transform>
 	<field-caster language="groovy" name="ConvertYnFlag"><![CDATA[
