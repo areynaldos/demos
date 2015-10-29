@@ -141,7 +141,7 @@
 	</entity>
 	<entity name="Book">
 		<property name="ISBN" type="string"/>
-		<property name="Title" type="string"/>
+		<property name="title" type="string"/>
 		<property name="subjectCode" type="string">
 			<description>Links to the alternate subject code</description>
 		</property>
