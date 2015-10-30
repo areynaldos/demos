@@ -380,10 +380,10 @@
 			the storage. -->
 		<property name="storerRecordCacheSize" value="100" />
 
-		<property name="preferredRulePlan">
+		<!--property name="preferredRulePlan">
 			<util:constant
 				static-field="com.maketechnologies.dmw.transformer.rules.Rule.Plan.FIELD_BASED" />
-		</property>
+		</property-->
 
 		<!-- -->
 		<property name="defaultForeignKeyViolationPolicy">
